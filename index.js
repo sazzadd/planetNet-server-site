@@ -55,12 +55,13 @@ async function run() {
   try {
     const db = client.db("planNet");
     const usersCollection = db.collection("users");
+    app.post("route", )
     // save or updste a user in db
     app.post("/users/:email", async (req, res) => {
       const email = req.params.email;
-
       const query = { email };
       const user = req.body;
+       console.log(user)
       // check if users exists in db
       const isExist = await usersCollection.findOne(query);
       if (isExist) {
@@ -68,6 +69,7 @@ async function run() {
       }
       const result = await usersCollection.insertOne({
         ...user,
+        role:'customer',
         timestamp: Date.now(),
       });
       res.send(result);
