@@ -102,7 +102,10 @@ async function run() {
         res.status(500).send(err);
       }
     });
+// plants 
+app.post('/plants', async (req, res) =>{
 
+})
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
