@@ -54,7 +54,9 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const db = client.db("planNet");
+    const plantsCollection = db.collection("plants");
     const usersCollection = db.collection("users");
+
     app.post("route", )
     // save or updste a user in db
     app.post("/users/:email", async (req, res) => {
@@ -104,7 +106,17 @@ async function run() {
     });
 // plants 
 app.post('/plants', async (req, res) =>{
-
+ try{
+  const plant = req.body;
+  const result = await plantsCollection.insertOne({...plant,
+    createdAt:new Date(),
+  })
+  res.status(201).send(result);
+  res.status(500).send({ message: "Internal server error" });
+ }
+ catch(err){
+  console.log(err)
+ }
 })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
