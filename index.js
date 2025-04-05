@@ -57,13 +57,13 @@ async function run() {
     const plantsCollection = db.collection("plants");
     const usersCollection = db.collection("users");
 
-    app.post("route", )
+    app.post("route");
     // save or updste a user in db
     app.post("/users/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email };
       const user = req.body;
-       console.log(user)
+      console.log(user);
       // check if users exists in db
       const isExist = await usersCollection.findOne(query);
       if (isExist) {
@@ -71,7 +71,7 @@ async function run() {
       }
       const result = await usersCollection.insertOne({
         ...user,
-        role:'customer',
+        role: "customer",
         timestamp: Date.now(),
       });
       res.send(result);
@@ -104,20 +104,25 @@ async function run() {
         res.status(500).send(err);
       }
     });
-// plants 
-app.post('/plants', async (req, res) =>{
- try{
-  const plant = req.body;
-  const result = await plantsCollection.insertOne({...plant,
-    createdAt:new Date(),
-  })
-  res.status(201).send(result);
-  res.status(500).send({ message: "Internal server error" });
- }
- catch(err){
-  console.log(err)
- }
-})
+    //post single plant
+    app.post("/plants", async (req, res) => {
+      try {
+        const plant = req.body;
+        const result = await plantsCollection.insertOne({
+          ...plant,
+          createdAt: new Date(),
+        });
+        res.status(201).send(result);
+        res.status(500).send({ message: "Internal server error" });
+      } catch (err) {
+        console.log(err);
+      }
+    });
+    // get plants
+    app.get("/plants", async (req, res) => {
+      const result = await plantsCollection.find().toArray();
+      res.send(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
