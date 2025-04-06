@@ -119,6 +119,17 @@ async function run() {
         console.log(err);
       }
     });
+    // get all plnats
+    app.get("/plants", async (req, res) => {
+      try {
+        const result = await plantsCollection.find().toArray();
+        res.send(result);
+      } catch (err) {
+        console.log("fetching plants error:", err);
+        res.status(500).send({ message: "Internal server error" });
+      }
+    });
+
     // get plant by id
     app.get("/plants/:id", async (req, res) => {
       const id = req.params.id;
